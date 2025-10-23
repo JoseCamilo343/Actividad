@@ -1,4 +1,4 @@
-import requests
+import requests 
 
 class Nodo:
     def __init__(self, nombre):
