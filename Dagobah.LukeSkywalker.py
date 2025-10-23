@@ -13,7 +13,7 @@ class Grafo:
         if destino not in self.nodos: self.nodos[destino] = Nodo(destino)
         self.nodos[origen].vecinos.append(destino)
     def mostrar(self):
-        print("\nRutas:")
+        print("\nUbicaciones:")
         for nombre in self.nodos:
             print(f"{nombre} {self.nodos[nombre].vecinos}")
 
