@@ -1,4 +1,4 @@
-import requests 
+import requests
 
 class Nodo:
     def __init__(self, nombre):
@@ -13,7 +13,7 @@ class Grafo:
         if destino not in self.nodos: self.nodos[destino] = Nodo(destino)
         self.nodos[origen].vecinos.append(destino)
     def mostrar(self):
-        print("\n Grafo de la ruta:")
+        print("\nRutas:")
         for nombre in self.nodos:
             print(f"{nombre} {self.nodos[nombre].vecinos}")
 
