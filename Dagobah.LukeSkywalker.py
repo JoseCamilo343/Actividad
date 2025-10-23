@@ -39,7 +39,7 @@ def calcular_ruta(origen, parada, destino):
         rutas = respuesta["routes"][0]["legs"]
         return 0 if indice == len(rutas) else rutas[indice]["distance"] + sumar_distancias(indice + 1)
 
-    return sumar_distancias() / 1000  # en kilómetros
+    return sumar_distancias() / 1000 
 
 def busqueda_binaria(lista, valor, inicio=0, fin=None):
     fin = len(lista) - 1 if fin is None else fin
@@ -71,6 +71,6 @@ if distancia_total:
     busqueda_binaria(lugares, origen)
 
     print(f"\nRuta: {origen} , {parada if parada else '(sin parada)'} , {destino}")
-    print(f"Distancia total: {distancia_total:.2f} km")
+    print(f"Distancia total: {distancia_total} km")
 else:
     print("\nNo se pudo calcular la ruta.")
