@@ -31,15 +31,22 @@ def calcular_ruta(origen, parada, destino):
         return None
 
     coordenadas = ";".join([f"{lon},{lat}" for lon, lat in puntos])
-    respuesta = requests.get(f"http://router.project-osrm.org/route/v1/driving/{coordenadas}?overview=false").json()
+    url = f"http://router.project-osrm.org/route/v1/driving/{coordenadas}?overview=false&steps=true"
+    respuesta = requests.get(url).json()
     if "routes" not in respuesta:
         return None
-
+    
     def sumar_distancias(indice=0):
         rutas = respuesta["routes"][0]["legs"]
         return 0 if indice == len(rutas) else rutas[indice]["distance"] + sumar_distancias(indice + 1)
+    
+    def sumar_tiempos(indice=0):
+        tramos = respuesta["routes"][0]["legs"]
+        return 0 if indice == len(tramos) else tramos[indice]["duration"] + sumar_tiempos(indice + 1)
 
-    return sumar_distancias() / 1000 
+    distancia_km = sumar_distancias() / 1000
+    tiempo_segundos = sumar_tiempos()
+    return distancia_km, tiempo_segundos 
 
 def busqueda_binaria(lista, valor, inicio=0, fin=None):
     fin = len(lista) - 1 if fin is None else fin
@@ -58,8 +65,12 @@ print("\n Escriba tu ruta de viaje en Colombia:")
 origen = input("\nIngrese el Origen: ")
 parada = input("\nIngrese la Parada: ")
 destino = input("\nIngrese el Destino: ")
+resultado = calcular_ruta(origen, parada, destino)
 
-distancia_total = calcular_ruta(origen, parada, destino)
+if resultado:
+    distancia_total, tiempo_total = resultado
+    horas = int(tiempo_total // 3600)
+    minutos = int((tiempo_total % 3600) // 60)
 
 if distancia_total:
     grafo_ruta = Grafo()
@@ -72,5 +83,6 @@ if distancia_total:
 
     print(f"\nRuta: {origen} , {parada if parada else '(sin parada)'} , {destino}")
     print(f"Distancia total: {distancia_total} km")
+    print(f"Tiempo estimado de viaje: {horas} horas y {minutos} minutos")
 else:
     print("\nNo se pudo calcular la ruta.")
